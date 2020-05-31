@@ -13,7 +13,7 @@ const TimerState = (props) => {
   // Bool determines whether timer is counting down
   const [timerRunning, setTimerRunning] = useState(false);
 
-  // Default start times for timer
+  // Default start times for timer (seconds)
   // Retrieve from storage if possible
   const [defaultTimes, setDefaultTimes] = useState({
     pomodoro: storage.getItem('pomodoro') || 25 * 60,
