@@ -14,8 +14,13 @@ const TimerState = (props) => {
   const [timerRunning, setTimerRunning] = useState(false);
 
   // Default start times for timer
+  // Retrieve from storage if possible
   const [defaultTimes, setDefaultTimes] = useState(
-    storage.getItem('defaultTimes') || {
+    {
+      pomodoro: storage.getItem('pomodoro'),
+      shortbreak: storage.getItem('shortbreak'),
+      longbreak: storage.getItem('longbreak'),
+    } || {
       pomodoro: 25 * 60,
       shortbreak: 5 * 60,
       longbreak: 15 * 60,
@@ -26,9 +31,6 @@ const TimerState = (props) => {
   // 'pomodoro' 'shortbreak' 'longbreak'
   // Useful for obtaining default time value from previous state
   const [mode, setMode] = useState('pomodoro');
-
-  // Volume range 0 - 1 inclusive
-  const [volume, setVolume] = useState(storage.getItem('volume') || 1);
 
   // Holds setTimeout object for timer
   let _timer = useRef(false);
@@ -51,15 +53,14 @@ const TimerState = (props) => {
     }
   }, [timerRunning, time]);
 
+  // Store default times changes
   useEffect(() => {
-    storage.setItem('defaultTimes', {
-      ...defaultTimes,
-    });
-  }, [defaultTimes]);
+    storage.setItem('pomodoro', defaultTimes.pomodoro);
+    storage.setItem('shortbreak', defaultTimes.shortbreak);
+    storage.setItem('longbreak', defaultTimes.longbreak);
 
-  useEffect(() => {
-    storage.setItem('volume', volume);
-  }, [volume]);
+    // eslint-disable-next-line
+  }, [defaultTimes]);
 
   // User clicks one of the mode buttons to change to pomodoro/short break/long break
   const changeMode = (modeName) => {
@@ -78,12 +79,10 @@ const TimerState = (props) => {
         timerRunning,
         mode,
         defaultTimes,
-        volume,
         setTime,
         setTimerRunning,
         setMode,
         setDefaultTimes,
-        setVolume,
         changeMode,
       }}
     >

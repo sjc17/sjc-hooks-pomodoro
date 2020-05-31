@@ -5,6 +5,7 @@ import { playSound } from '../display/Audio';
 const SettingsMenu = () => {
   const timerContext = useContext(TimerContext);
   const { defaultTimes, setDefaultTimes } = timerContext;
+  const storage = window.localStorage;
 
   return (
     <div className='modal fade' id='settingsModal'>
@@ -29,12 +30,13 @@ const SettingsMenu = () => {
                 className='form-control'
                 placeholder='25'
                 value={Math.floor(defaultTimes.pomodoro / 60)}
-                onChange={(e) =>
-                  setDefaultTimes({
-                    ...defaultTimes,
-                    pomodoro: parseInt(e.target.value) * 60,
-                  })
-                }
+                onChange={(e) => {
+                  if (!isNaN(e.target.value) && e.target.value)
+                    setDefaultTimes({
+                      ...defaultTimes,
+                      pomodoro: parseInt(e.target.value) * 60,
+                    });
+                }}
                 id='input-pomodoro'
               />
             </div>
@@ -50,12 +52,13 @@ const SettingsMenu = () => {
                 className='form-control'
                 placeholder='5'
                 value={Math.floor(defaultTimes.shortbreak / 60)}
-                onChange={(e) =>
-                  setDefaultTimes({
-                    ...defaultTimes,
-                    shortbreak: parseInt(e.target.value) * 60,
-                  })
-                }
+                onChange={(e) => {
+                  if (!isNaN(e.target.value) && e.target.value)
+                    setDefaultTimes({
+                      ...defaultTimes,
+                      shortbreak: parseInt(e.target.value) * 60,
+                    });
+                }}
                 id='input-shortbreak'
               />
             </div>
@@ -71,12 +74,13 @@ const SettingsMenu = () => {
                 className='form-control'
                 placeholder='15'
                 value={Math.floor(defaultTimes.longbreak / 60)}
-                onChange={(e) =>
-                  setDefaultTimes({
-                    ...defaultTimes,
-                    longbreak: parseInt(e.target.value) * 60,
-                  })
-                }
+                onChange={(e) => {
+                  if (!isNaN(e.target.value) && e.target.value)
+                    setDefaultTimes({
+                      ...defaultTimes,
+                      longbreak: parseInt(e.target.value) * 60,
+                    });
+                }}
                 id='input-longbreak'
               />
             </div>
@@ -89,8 +93,9 @@ const SettingsMenu = () => {
                 step='0.1'
                 className='flex-grow-1 mx-3'
                 id='input-volume'
-                defaultValue='1'
+                defaultValue={storage.getItem('volume') || '1'}
                 onChange={(e) => {
+                  storage.setItem('volume', e.target.value);
                   document.querySelector('audio').volume = e.target.value;
                 }}
               />
@@ -106,6 +111,21 @@ const SettingsMenu = () => {
             </div>
           </div>
           <div className='modal-footer'>
+            <button
+              type='button'
+              className='btn btn-primary'
+              onClick={() => {
+                setDefaultTimes({
+                  pomodoro: 25 * 60,
+                  shortbreak: 5 * 60,
+                  longbreak: 15 * 60,
+                });
+                document.querySelector('audio').volume = '1';
+                document.querySelector('#input-volume').value = '1';
+              }}
+            >
+              Reset to defaults
+            </button>
             <button
               type='button'
               className='btn btn-secondary'
