@@ -15,17 +15,11 @@ const TimerState = (props) => {
 
   // Default start times for timer
   // Retrieve from storage if possible
-  const [defaultTimes, setDefaultTimes] = useState(
-    {
-      pomodoro: storage.getItem('pomodoro'),
-      shortbreak: storage.getItem('shortbreak'),
-      longbreak: storage.getItem('longbreak'),
-    } || {
-      pomodoro: 25 * 60,
-      shortbreak: 5 * 60,
-      longbreak: 15 * 60,
-    }
-  );
+  const [defaultTimes, setDefaultTimes] = useState({
+    pomodoro: storage.getItem('pomodoro') || 25 * 60,
+    shortbreak: storage.getItem('shortbreak') || 5 * 60,
+    longbreak: storage.getItem('longbreak') || 15 * 60,
+  });
 
   // Timer can run in 3 modes:
   // 'pomodoro' 'shortbreak' 'longbreak'
