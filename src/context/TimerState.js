@@ -7,9 +7,6 @@ const TimerState = (props) => {
   // Local storage
   const storage = window.localStorage;
 
-  // Remaining time on timer in seconds
-  const [time, setTime] = useState(25 * 60);
-
   // Bool determines whether timer is counting down
   const [timerRunning, setTimerRunning] = useState(false);
 
@@ -20,6 +17,9 @@ const TimerState = (props) => {
     shortbreak: storage.getItem('shortbreak') || 5 * 60,
     longbreak: storage.getItem('longbreak') || 15 * 60,
   });
+
+  // Remaining time on timer in seconds
+  const [time, setTime] = useState(defaultTimes.pomodoro);
 
   // Timer can run in 3 modes:
   // 'pomodoro' 'shortbreak' 'longbreak'
